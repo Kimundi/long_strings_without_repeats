@@ -28,11 +28,19 @@ fn alphabet_size(symbols: &[u8]) -> u8 {
     alpha.iter().cloned().sum()
 }
 
-pub fn lswr(mut a: Vec<u8>, alpha_size: u8) -> Vec<u8> {
-    let mut size = alphabet_size(&a[..]);
+fn log2_ceil(n: u8) -> u8 {
+    8 - (n-1).leading_zeros() as u8
+}
 
-    for j in 1..20  {
-        println!("{:?} alpha size: {}", a, size);
+pub fn lswr(mut a: Vec<u8>, mut alpha_size: u8) -> Vec<u8> {
+    for j in 1..  {
+        println!("{:?} alpha size: {}", a, alpha_size);
+
+        let new_alpha_size = 2 * log2_ceil(alpha_size);
+        if alpha_size == new_alpha_size {
+            break;
+        }
+        alpha_size = new_alpha_size;
 
         for i in (j..a.len()).rev() {
             a[i] = label(a[i-1], a[i]);
@@ -42,11 +50,7 @@ pub fn lswr(mut a: Vec<u8>, alpha_size: u8) -> Vec<u8> {
             a[i] = 255;
         }
 
-        let new_size = alphabet_size(&a[j..]);
-        if size == new_size {
-            //break;
-        }
-        size = new_size;
+
     }
 
     a[0] = !0;
