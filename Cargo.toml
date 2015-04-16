@@ -1,0 +1,4 @@
+[package]
+name = "long_strings_without_repeats_rust"
+version = "0.0.1"
+authors = ["Marvin Löbel <loebel.marvin@gmail.com>"]
