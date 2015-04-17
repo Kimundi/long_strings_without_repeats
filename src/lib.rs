@@ -10,9 +10,11 @@ fn bit(i: u8, byte: u8) -> u8 {
     (byte >> i) & 1
 }
 
-// returns rounded up binary logarithm of n
+// returns rounded up binary logarithm of n, that is it returns `ceil(log2(n))`.
+// only defined for n >= 1.
 fn log2_ceil(n: u8) -> u8 {
-    8 - (n-1).leading_zeros() as u8
+    // see http://en.wikipedia.org/wiki/Binary_logarithm#Integer_rounding
+    (8 - (n-1).leading_zeros()) as u8
 }
 
 // alphabet reduction label calculation
@@ -33,7 +35,9 @@ fn neighbor_check(a: u8, b: u8) -> u8 {
 }
 
 pub fn lswr(mut a: Vec<u8>, mut alpha_size: u8) -> Vec<u8> {
+    // endless loop
     loop {
+
         // println!("{:?} alpha size: {}", a, alpha_size);
 
         // calculate new alphabet size,
@@ -56,7 +60,8 @@ pub fn lswr(mut a: Vec<u8>, mut alpha_size: u8) -> Vec<u8> {
     // replace all 3, 4, 5
     for n in 3..6 {
         // check neighbors of all a[i]
-        if a[0] == n {
+
+        if a.len() > 0 && a[0] == n {
             a[0] = neighbor_check(a[1], a[1]);
         }
         for i in 1..(a.len() - 1) {
@@ -113,4 +118,14 @@ fn test_lsb_differ_index() {
     assert_eq!(lsb_differ_index(0b00, 0b10), 1);
     assert_eq!(lsb_differ_index(0b100, 0b010), 1);
     assert_eq!(lsb_differ_index(0b1001, 0b0101), 2);
+}
+
+#[test]
+fn test_log2_ceil() {
+    assert_eq!(log2_ceil(17), 5);
+    assert_eq!(log2_ceil(16), 4);
+    assert_eq!(log2_ceil(15), 4);
+    assert_eq!(log2_ceil(9), 4);
+    assert_eq!(log2_ceil(8), 3);
+    assert_eq!(log2_ceil(6), 3);
 }
