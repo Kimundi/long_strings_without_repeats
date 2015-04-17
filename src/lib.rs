@@ -34,6 +34,7 @@ fn neighbor_check(a: u8, b: u8) -> u8 {
     }
 }
 
+/// longest strings without repreats algorithm
 pub fn lswr(mut a: Vec<u8>, mut alpha_size: u8) -> Vec<u8> {
     // endless loop
     loop {
@@ -89,6 +90,9 @@ fn test_lswr() {
     // Same string but in ascii/utf8 range
     assert_eq!(lswr("cabageheadbag".into(), 255),
                vec![1, 2, 0, 2, 1, 0, 2, 1, 0, 1]);
+
+    assert_eq!(lswr("".into(), 255),
+               vec![]);
 }
 
 #[test]
@@ -122,6 +126,7 @@ fn test_lsb_differ_index() {
 
 #[test]
 fn test_log2_ceil() {
+    assert_eq!(log2_ceil(255), 8);
     assert_eq!(log2_ceil(17), 5);
     assert_eq!(log2_ceil(16), 4);
     assert_eq!(log2_ceil(15), 4);
