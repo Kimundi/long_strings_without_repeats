@@ -23,19 +23,19 @@ fn label(a_i_minus_one: u8, a_i: u8) -> u8 {
     2 * l + bit(l, a_i)
 }
 
-/// return the least of {0,1,2} that is not in {a, b}
-fn neighbor_check(a: u8, b: u8) -> u8 {
-    if a != 0 && b != 0 {
-        0
-    } else if a != 1 && b != 1 {
-        1
-    } else {
-        2
+/// longest strings without repreats algorithm
+pub fn lswr(mut a: Vec<u8>, alpha_size: u8) -> Vec<u8> {
+    {
+        let mut new_a = phase1(&mut *a, alpha_size);
+        phase2(new_a);
     }
+
+    a
 }
 
-/// longest strings without repreats algorithm
-pub fn lswr(mut a: Vec<u8>, mut alpha_size: u8) -> Vec<u8> {
+fn phase1(mut a: &mut [u8], mut alpha_size: u8) -> &mut [u8] {
+    let mut len = a.len();
+
     // endless loop
     loop {
 
@@ -50,33 +50,82 @@ pub fn lswr(mut a: Vec<u8>, mut alpha_size: u8) -> Vec<u8> {
         alpha_size = new_alpha_size;
 
         // reduce alphabet
-        for i in 1..a.len() {
-            a[i-1] = label(a[i-1], a[i]);
+        {
+            // the following is equivalent to
+            // for i in 1..a.len() {
+            //     a[i-1] = label(a[i-1], a[i]);
+            // }
+            // but uses iterators to avoid array index bound checks.
+
+            // creates iterator that yields mutable reference
+            // to the elements
+            let mut iter = a.iter_mut();
+
+            // try to take first element, then iterate over all
+            // remaining elements
+            if let Some(mut i_minus_one_ptr) = iter.next() {
+                for i_ptr in iter {
+                    *i_minus_one_ptr = label(*i_minus_one_ptr, *i_ptr);
+                    i_minus_one_ptr = i_ptr;
+                }
+            }
         }
 
         // remove unneeded last element
-        a.pop();
+        len -= 1;
     }
 
-    // replace all 3, 4, 5
-    for n in 3..6 {
-        // check neighbors of all a[i]
+    &mut a[..len]
+}
 
-        if a.len() > 0 && a[0] == n {
-            a[0] = neighbor_check(a[1], a[1]);
-        }
-        for i in 1..(a.len() - 1) {
-            if a[i] == n {
-                a[i] = neighbor_check(a[i-1], a[i+1]);
+/// return the least of {0,1,2} that is not in {a, b}
+fn neighbor_check(a: Option<u8>, b: Option<u8>) -> u8 {
+    if a != Some(0) && b != Some(0) {
+        // no 0 on left or right
+        0
+    } else if a != Some(1) && b != Some(1) {
+        // 0, but no 1 on left or right
+        1
+    } else {
+        // 0 and 1 on left and right
+        2
+    }
+}
+
+fn phase2(a: &mut [u8]) {
+    use std::mem;
+
+    // replace all of 3, 4, 5
+    for n in 3..6 {
+        // iterate over slice, for each element compare
+        // with both neighbors
+        // for first and last element, compare with right/last neighbor only
+
+        let mut iter = a.iter_mut();
+
+        if let Some(current_ptr) = iter.next() {
+            let mut left_ptr:    Option<&mut u8> = None;
+            let mut current_ptr: &mut u8         = current_ptr;
+            let mut right_ptr:   Option<&mut u8> = iter.next();
+
+            loop {
+                if *current_ptr == n {
+                    *current_ptr = neighbor_check(
+                        left_ptr.as_ref().map(|ptr| **ptr),
+                        right_ptr.as_ref().map(|ptr| **ptr));
+                }
+
+                if let Some(right_ptr) = mem::replace(&mut right_ptr,
+                                                      iter.next())
+                {
+                    left_ptr = Some(mem::replace(&mut current_ptr,
+                                                 right_ptr));
+                } else {
+                    break
+                }
             }
         }
-        let l = a.len()-1;
-        if a[l] == n {
-            a[l] = neighbor_check(a[l-1], a[l-1]);
-        }
     }
-
-    a
 }
 
 #[test]
