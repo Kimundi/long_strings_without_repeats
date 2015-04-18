@@ -13,6 +13,7 @@ fn bench_lswr_short<F>(bencher: &mut Bencher, lswr: F)
     let mut string = example.clone();
 
     bencher.iter(|| {
+        // copy original string back, avoiding reallocations
         string.clone_from(&example);
         black_box(lswr(&mut string, 8));
     });
@@ -53,6 +54,7 @@ fn bench_lswr_big<F>(bencher: &mut Bencher, lswr: F)
     let mut string = big_example.clone();
 
     bencher.iter(|| {
+        // copy original string back, avoiding reallocations
         string.clone_from(&big_example);
         black_box(lswr(&mut string, 8));
     });
