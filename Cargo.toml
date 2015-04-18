@@ -9,3 +9,6 @@ gcc = "*"
 
 [dependencies]
 libc = "*"
+
+[profile.bench]
+lto = true

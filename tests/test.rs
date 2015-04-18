@@ -3,9 +3,9 @@
 extern crate test;
 
 extern crate long_strings_without_repeats as lswr;
-use lswr::{rust_iter, rust_index, cpp_index};
+use lswr::{rust_naive, cpp_naive, rust_iter};
 
-// Common test implementation that gets reused for all implementations
+// Common generic test
 fn test_lswr<F>(lswr :F)
     where F: Fn(&mut [u8], u8) -> &mut [u8]
 {
@@ -28,16 +28,16 @@ fn test_lswr<F>(lswr :F)
 }
 
 #[test]
+fn test_lswr_rust_naive() {
+    test_lswr(rust_naive::lswr)
+}
+
+#[test]
+fn test_lswr_cpp_naive() {
+    test_lswr(cpp_naive::lswr)
+}
+
+#[test]
 fn test_lswr_rust_iter() {
     test_lswr(rust_iter::lswr)
-}
-
-#[test]
-fn test_lswr_rust_index() {
-    test_lswr(rust_index::lswr)
-}
-
-#[test]
-fn test_lswr_cpp_index() {
-    test_lswr(cpp_index::lswr)
 }

@@ -1,6 +1,7 @@
-pub mod rust_index;
+pub mod rust_naive;
+pub mod cpp_naive;
+
 pub mod rust_iter;
-pub mod cpp_index;
 
 /// Create example in paper by mapping a = 0, b = 1, c = 2 ...
 pub fn new_paper_example_string() -> Vec<u8> {
