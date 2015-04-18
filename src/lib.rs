@@ -1,3 +1,5 @@
+#![feature(libc)]
+
 pub mod rust_naive;
 pub mod cpp_naive;
 
@@ -23,16 +25,16 @@ fn log2_ceil(n: u8) -> u8 {
 
 /// Return the index of the least significant bit that differs
 fn lsb_differ_index(a: u8, b: u8) -> u8 {
-    // xor => bits mit underschieden sind 1
-    // trailing_zero => position des ersten unterschieds
+    // xor => bits with differences are 1
+    // trailing_zero => position of first difference
     (a ^ b).trailing_zeros() as u8
 }
 
 #[test]
 fn test_bit() {
-    assert_eq!(bit(0, 255), 1);
-    assert_eq!(bit(7, 255), 1);
-    assert_eq!(bit(3, 255), 1);
+    assert_eq!(bit(0, 0xff), 1);
+    assert_eq!(bit(7, 0xff), 1);
+    assert_eq!(bit(3, 0xff), 1);
 
     assert_eq!(bit(0, 0), 0);
     assert_eq!(bit(7, 0), 0);

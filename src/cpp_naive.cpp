@@ -1,11 +1,15 @@
 #include <cstddef>
 #include <iostream>
 #include <cstdint>
+#include <climits>
 
 using namespace::std;
 
 static uint8_t leading_zeros(uint8_t  n) {
-    return __builtin_clz(n) - (32 - 8);
+    // __builtin_clz() is defined for unsigned it, but we just
+    // work with a u8, so we need to ignore evrything except the last byte
+    const int uncounted_bits = (sizeof(unsigned int) - sizeof(uint8_t)) * CHAR_BIT;
+    return __builtin_clz(n) - uncounted_bits;
 }
 
 static uint8_t trailing_zeros(uint8_t  n) {
@@ -26,8 +30,8 @@ static uint8_t log2_ceil(uint8_t n) {
 
 /// Return the index of the least significant bit that differs
 static uint8_t lsb_differ_index(uint8_t a, uint8_t b) {
-    // xor => bits mit underschieden sind 1
-    // trailing_zero => position des ersten unterschieds
+    // xor => bits with differences are 1
+    // trailing_zero => position of first difference
     return uint8_t(trailing_zeros(a ^ b));
 }
 
@@ -63,6 +67,7 @@ static uintptr_t phase1(uint8_t * a, uintptr_t a_len, uint8_t alpha_size) {
 }
 
 /// return the least of {0, 1, 2} that is not in {a, b}
+/// (using int as a replacement for Option<u8> from the Rust version)
 static uint8_t neighbor_check(int a, int b) {
     if (a != 0 && b != 0) {
         // no 0 on left or right
