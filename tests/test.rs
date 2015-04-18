@@ -3,7 +3,6 @@
 extern crate test;
 
 extern crate long_strings_without_repeats as lswr;
-use lswr::{rust_naive, cpp_naive, rust_iter};
 
 // Common generic test
 fn test_lswr<F>(lswr :F)
@@ -29,15 +28,20 @@ fn test_lswr<F>(lswr :F)
 
 #[test]
 fn test_lswr_rust_naive() {
-    test_lswr(rust_naive::lswr)
+    test_lswr(lswr::rust_naive::lswr)
 }
 
 #[test]
 fn test_lswr_cpp_naive() {
-    test_lswr(cpp_naive::lswr)
+    test_lswr(lswr::cpp_naive::lswr)
 }
 
 #[test]
 fn test_lswr_rust_iter() {
-    test_lswr(rust_iter::lswr)
+    test_lswr(lswr::rust_iter::lswr)
+}
+
+#[test]
+fn test_lswr_rust_unsafe() {
+    test_lswr(lswr::rust_unsafe::lswr)
 }

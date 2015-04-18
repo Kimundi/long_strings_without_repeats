@@ -4,7 +4,6 @@ extern crate test;
 use self::test::{Bencher, black_box};
 
 extern crate long_strings_without_repeats as lswr;
-use lswr::{rust_naive, cpp_naive, rust_iter};
 
 // Common generic bencher for a short string
 fn bench_lswr_short<F>(bencher: &mut Bencher, lswr: F)
@@ -21,17 +20,22 @@ fn bench_lswr_short<F>(bencher: &mut Bencher, lswr: F)
 
 #[bench]
 fn bench_rust_naive_short(bencher: &mut Bencher) {
-    bench_lswr_short(bencher, rust_naive::lswr);
+    bench_lswr_short(bencher, lswr::rust_naive::lswr);
 }
 
 #[bench]
 fn bench_cpp_naive_short(bencher: &mut Bencher) {
-    bench_lswr_short(bencher, cpp_naive::lswr);
+    bench_lswr_short(bencher, lswr::cpp_naive::lswr);
 }
 
 #[bench]
 fn bench_rust_iter_short(bencher: &mut Bencher) {
-    bench_lswr_short(bencher, rust_iter::lswr);
+    bench_lswr_short(bencher, lswr::rust_iter::lswr);
+}
+
+#[bench]
+fn bench_rust_unsafe_short(bencher: &mut Bencher) {
+    bench_lswr_short(bencher, lswr::rust_unsafe::lswr);
 }
 
 // Common generic bencher for a big (1mb) string
@@ -56,15 +60,20 @@ fn bench_lswr_big<F>(bencher: &mut Bencher, lswr: F)
 
 #[bench]
 fn bench_rust_naive_big(bencher: &mut Bencher) {
-    bench_lswr_big(bencher, rust_naive::lswr);
+    bench_lswr_big(bencher, lswr::rust_naive::lswr);
 }
 
 #[bench]
 fn bench_cpp_naive_big(bencher: &mut Bencher) {
-    bench_lswr_big(bencher, cpp_naive::lswr);
+    bench_lswr_big(bencher, lswr::cpp_naive::lswr);
 }
 
 #[bench]
 fn bench_rust_iter_big(bencher: &mut Bencher) {
-    bench_lswr_big(bencher, rust_iter::lswr);
+    bench_lswr_big(bencher, lswr::rust_iter::lswr);
+}
+
+#[bench]
+fn bench_rust_unsafe_big(bencher: &mut Bencher) {
+    bench_lswr_big(bencher, lswr::rust_unsafe::lswr);
 }
