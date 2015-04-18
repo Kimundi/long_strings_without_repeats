@@ -1,4 +1,11 @@
 [package]
-name = "long_strings_without_repeats_rust"
+name = "long_strings_without_repeats"
 version = "0.0.1"
 authors = ["Marvin Löbel <loebel.marvin@gmail.com>"]
+build = "build.rs"
+
+[build-dependencies]
+gcc = "*"
+
+[dependencies]
+libc = "*"
