@@ -5,14 +5,20 @@
 
 using namespace::std;
 
-static uint8_t leading_zeros(uint8_t  n) {
-    // __builtin_clz() is defined for unsigned it, but we just
-    // work with a u8, so we need to ignore evrything except the last byte
+static uint8_t leading_zeros(uint8_t n) {
+    // Not aware of a more portable way right now,
+    // this function works for gcc and clang on my system.
+
+    // __builtin_clz() is defined for unsigned int, but we just
+    // work with a byte, so we need to ignore the leading bytes.
     const int uncounted_bits = (sizeof(unsigned int) - sizeof(uint8_t)) * CHAR_BIT;
     return __builtin_clz(n) - uncounted_bits;
 }
 
-static uint8_t trailing_zeros(uint8_t  n) {
+static uint8_t trailing_zeros(uint8_t n) {
+    // Not aware of a more portable way right now,
+    // this function works for gcc and clang on my system.
+
     return __builtin_ctz(n);
 }
 
@@ -42,6 +48,8 @@ static uint8_t label(uint8_t a_i_minus_one, uint8_t a_i) {
 }
 
 /// first phase, reducing until alphabet size unchanged and == 6
+/// the return type represents the length of the subarray containing the
+/// final result
 static uintptr_t phase1(uint8_t * a, uintptr_t a_len, uint8_t alpha_size) {
     uint8_t len = a_len;
 
@@ -107,8 +115,7 @@ static uintptr_t lswr(uint8_t * a, uintptr_t a_len, uint8_t alpha_size) {
     return new_len;
 }
 
-/// C FFI wrapper:
-
+/// C FFI wrapper that gets called by Rust
 extern "C" uintptr_t lswr_cpp_ffi(uint8_t * a, uintptr_t a_len, uint8_t alpha_size) {
     return lswr(a, a_len, alpha_size);
 }

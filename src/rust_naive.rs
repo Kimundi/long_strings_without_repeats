@@ -5,9 +5,9 @@ use lsb_differ_index;
 /// longest strings without repeats algorithm
 pub fn lswr(a: &mut [u8], alpha_size: u8) -> &mut [u8] {
     let new_len = phase1(a, alpha_size);
+    let a = &mut a[..new_len];
     phase2(a);
-
-    &mut a[..new_len]
+    a
 }
 
 /// alphabet reduction label calculation
