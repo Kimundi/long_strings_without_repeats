@@ -51,7 +51,7 @@ static uint8_t label(uint8_t a_i_minus_one, uint8_t a_i) {
 /// the return type represents the length of the subarray containing the
 /// final result
 static uintptr_t phase1(uint8_t * a, uintptr_t a_len, uint8_t alpha_size) {
-    uint8_t len = a_len;
+    uintptr_t len = a_len;
 
     while (len > 0) {
         // calculate new alphabet size,

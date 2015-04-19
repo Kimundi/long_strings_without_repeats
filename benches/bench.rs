@@ -39,6 +39,11 @@ fn bench_rust_unsafe_short(bencher: &mut Bencher) {
     bench_lswr_short(bencher, lswr::rust_unsafe::lswr);
 }
 
+#[bench]
+fn bench_noop_short(bencher: &mut Bencher) {
+    bench_lswr_short(bencher, |a, _| a);
+}
+
 // Common generic bencher for a big (1mb) string
 fn bench_lswr_big<F>(bencher: &mut Bencher, lswr: F)
     where F: Fn(&mut [u8], u8) -> &mut [u8]
@@ -78,4 +83,9 @@ fn bench_rust_iter_big(bencher: &mut Bencher) {
 #[bench]
 fn bench_rust_unsafe_big(bencher: &mut Bencher) {
     bench_lswr_big(bencher, lswr::rust_unsafe::lswr);
+}
+
+#[bench]
+fn bench_noop_big(bencher: &mut Bencher) {
+    bench_lswr_big(bencher, |a, _| a);
 }
