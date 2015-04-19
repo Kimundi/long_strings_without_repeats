@@ -30,8 +30,13 @@ fn bench_cpp_naive_short(bencher: &mut Bencher) {
 }
 
 #[bench]
-fn bench_rust_unsafe_short(bencher: &mut Bencher) {
-    bench_lswr_short(bencher, lswr::rust_unsafe::lswr);
+fn bench_rust_unsafe_index_short(bencher: &mut Bencher) {
+    bench_lswr_short(bencher, lswr::rust_unsafe_index::lswr);
+}
+
+#[bench]
+fn bench_rust_unsafe_pointer_short(bencher: &mut Bencher) {
+    bench_lswr_short(bencher, lswr::rust_unsafe_pointer::lswr);
 }
 
 #[bench]
@@ -72,8 +77,13 @@ fn bench_cpp_naive_big(bencher: &mut Bencher) {
 }
 
 #[bench]
-fn bench_rust_unsafe_big(bencher: &mut Bencher) {
-    bench_lswr_big(bencher, lswr::rust_unsafe::lswr);
+fn bench_rust_unsafe_index_big(bencher: &mut Bencher) {
+    bench_lswr_big(bencher, lswr::rust_unsafe_index::lswr);
+}
+
+#[bench]
+fn bench_rust_unsafe_pointer_big(bencher: &mut Bencher) {
+    bench_lswr_big(bencher, lswr::rust_unsafe_pointer::lswr);
 }
 
 #[bench]

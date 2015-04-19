@@ -37,8 +37,13 @@ fn test_lswr_cpp_naive() {
 }
 
 #[test]
-fn test_lswr_rust_unsafe() {
-    test_lswr(lswr::rust_unsafe::lswr)
+fn test_lswr_rust_unsafe_index() {
+    test_lswr(lswr::rust_unsafe_index::lswr)
+}
+
+#[test]
+fn test_lswr_rust_unsafe_pointer() {
+    test_lswr(lswr::rust_unsafe_pointer::lswr)
 }
 
 #[test]
@@ -62,9 +67,14 @@ fn test_comparison() {
     let b = string.clone();
 
     string.clone_from(&big_example);
-    lswr::rust_unsafe::lswr(&mut string, 8);
+    lswr::rust_unsafe_index::lswr(&mut string, 8);
     let c = string.clone();
+
+    string.clone_from(&big_example);
+    lswr::rust_unsafe_pointer::lswr(&mut string, 8);
+    let d = string.clone();
 
     assert_eq!(a, b);
     assert_eq!(b, c);
+    assert_eq!(c, d);
 }

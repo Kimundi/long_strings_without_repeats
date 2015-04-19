@@ -4,9 +4,9 @@ use lsb_differ_index;
 
 /// longest strings without repeats algorithm
 pub fn lswr(a: &mut [u8], alpha_size: u8) -> &mut [u8] {
-    let new_len = phase1(a, alpha_size);
+    let new_len = phase1(a.as_mut_ptr(), a.len(), alpha_size);
     let a = &mut a[..new_len];
-    phase2(a);
+    phase2(a.as_mut_ptr(), a.len());
     a
 }
 
@@ -17,8 +17,12 @@ fn label(a_i_minus_one: u8, a_i: u8) -> u8 {
 }
 
 /// first phase, reducing until alphabet size unchanged and == 6
-fn phase1(mut a: &mut [u8], mut alpha_size: u8) -> usize {
-    let mut len = a.len();
+fn phase1(mut a: *mut u8, a_len: usize, mut alpha_size: u8) -> usize {
+    let mut len = a_len;
+
+    macro_rules! a {
+        ($i:expr) => (*a.offset($i as isize))
+    }
 
     while len > 0 {
         // calculate new alphabet size,
@@ -31,7 +35,9 @@ fn phase1(mut a: &mut [u8], mut alpha_size: u8) -> usize {
 
         // reduce alphabet
         for i in 1..len {
-            a[i-1] = label(a[i-1], a[i]);
+            unsafe {
+                a![i-1] = label(a![i-1], a![i]);
+            }
         }
 
         // remove unneeded last element
@@ -56,37 +62,25 @@ fn neighbor_check(a: i32, b: i32) -> u8 {
 }
 
 /// second phase, reducing alphabet from 6 to 3
-fn phase2(a: &mut [u8]) {
+fn phase2(a: *mut u8, a_len: usize) {
+    macro_rules! a {
+        ($i:expr) => (*a.offset($i as isize))
+    }
+
     // replace all of 3, 4, 5
     for n in 3..6 {
         // iterate over slice, for each element compare
         // with both neighbors
         // for first and last element, compare with right/last neighbor only
 
-        for i in 0..a.len() {
-            if a[i] == n {
-                let left  = if i > 0           { a[i-1] as i32 } else { -1 };
-                let right = if i < a.len() - 1 { a[i+1] as i32 } else { -1 };
-                a[i] = neighbor_check(left, right);
+        for i in 0..a_len {
+            unsafe {
+                if a![i] == n {
+                    let left  = if i > 0         { a![i-1] as i32 } else { -1 };
+                    let right = if i < a_len - 1 { a![i+1] as i32 } else { -1 };
+                    a![i] = neighbor_check(left, right);
+                }
             }
         }
     }
-}
-
-#[test]
-fn test_phase1() {
-    // Compare with paper example
-    let mut string = ::new_paper_example_string();
-    let new_len = phase1(&mut string, 8);
-    assert_eq!(&mut string[..new_len],
-                &mut [2, 1, 0, 3, 2, 1, 0, 4, 1, 2, 0, 3]);
-}
-
-#[test]
-fn test_phase2() {
-    // Compare with paper example
-    let mut string = vec![2, 1, 0, 3, 2, 1, 0, 4, 1, 2, 0, 3];
-    phase2(&mut string);
-    assert_eq!(string,
-                vec![2, 1, 0, 1, 2, 1, 0, 2, 1, 2, 0, 1]);
 }
