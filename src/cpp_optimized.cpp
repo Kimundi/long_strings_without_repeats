@@ -97,12 +97,21 @@ static void phase2(uint8_t * a, uintptr_t a_len) {
         // with both neighbors
         // for first and last element, compare with right/last neighbor only
 
-        for (uintptr_t i = 0; i < a_len; i++) {
-            if (a[i] == n) {
-                int left  = i > 0         ? a[i-1] : -1;
-                int right = i < a_len - 1 ? a[i+1] : -1;
-                a[i] = neighbor_check(left, right);
+        if (a_len == 1 && a[0] == n) {
+            a[0] = neighbor_check(-1, -1);
+        }
+        if (a_len >= 2 && a[0] == n) {
+            a[0] = neighbor_check(-1, a[1]);
+        }
+        if (a_len >= 3) {
+            for (uintptr_t i = 1; i < a_len - 1; i++) {
+                if (a[i] == n) {
+                    a[i] = neighbor_check(a[i-1], a[i+1]);
+                }
             }
+        }
+        if (a_len >= 2 && a[a_len - 1] == n) {
+            a[a_len - 1] = neighbor_check(a[a_len - 2], -1);
         }
     }
 }
@@ -116,6 +125,6 @@ static uintptr_t lswr(uint8_t * a, uintptr_t a_len, uint8_t alpha_size) {
 }
 
 /// C FFI wrapper that gets called by Rust
-extern "C" uintptr_t lswr_naive_cpp_ffi(uint8_t * a, uintptr_t a_len, uint8_t alpha_size) {
+extern "C" uintptr_t lswr_optimized_cpp_ffi(uint8_t * a, uintptr_t a_len, uint8_t alpha_size) {
     return lswr(a, a_len, alpha_size);
 }

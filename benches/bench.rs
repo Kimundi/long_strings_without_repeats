@@ -30,6 +30,11 @@ fn bench_cpp_naive_short(bencher: &mut Bencher) {
 }
 
 #[bench]
+fn bench_cpp_optimized_short(bencher: &mut Bencher) {
+    bench_lswr_short(bencher, lswr::cpp_optimized::lswr);
+}
+
+#[bench]
 fn bench_rust_iter_short(bencher: &mut Bencher) {
     bench_lswr_short(bencher, lswr::rust_iter::lswr);
 }
@@ -73,6 +78,11 @@ fn bench_rust_naive_big(bencher: &mut Bencher) {
 #[bench]
 fn bench_cpp_naive_big(bencher: &mut Bencher) {
     bench_lswr_big(bencher, lswr::cpp_naive::lswr);
+}
+
+#[bench]
+fn bench_cpp_optimized_big(bencher: &mut Bencher) {
+    bench_lswr_big(bencher, lswr::cpp_optimized::lswr);
 }
 
 #[bench]
