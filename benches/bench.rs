@@ -30,22 +30,13 @@ fn bench_cpp_naive_short(bencher: &mut Bencher) {
 }
 
 #[bench]
-fn bench_cpp_optimized_short(bencher: &mut Bencher) {
-    bench_lswr_short(bencher, lswr::cpp_optimized::lswr);
-}
-
-#[bench]
-fn bench_rust_iter_short(bencher: &mut Bencher) {
-    bench_lswr_short(bencher, lswr::rust_iter::lswr);
-}
-
-#[bench]
 fn bench_rust_unsafe_short(bencher: &mut Bencher) {
     bench_lswr_short(bencher, lswr::rust_unsafe::lswr);
 }
 
 #[bench]
 fn bench_noop_short(bencher: &mut Bencher) {
+    // Test with a no-op implementantion to show memcopy overhead in comparison
     bench_lswr_short(bencher, |a, _| a);
 }
 
@@ -81,21 +72,12 @@ fn bench_cpp_naive_big(bencher: &mut Bencher) {
 }
 
 #[bench]
-fn bench_cpp_optimized_big(bencher: &mut Bencher) {
-    bench_lswr_big(bencher, lswr::cpp_optimized::lswr);
-}
-
-#[bench]
-fn bench_rust_iter_big(bencher: &mut Bencher) {
-    bench_lswr_big(bencher, lswr::rust_iter::lswr);
-}
-
-#[bench]
 fn bench_rust_unsafe_big(bencher: &mut Bencher) {
     bench_lswr_big(bencher, lswr::rust_unsafe::lswr);
 }
 
 #[bench]
 fn bench_noop_big(bencher: &mut Bencher) {
+    // Test with a no-op implementantion to show memcopy overhead in comparison
     bench_lswr_big(bencher, |a, _| a);
 }

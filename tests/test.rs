@@ -37,16 +37,6 @@ fn test_lswr_cpp_naive() {
 }
 
 #[test]
-fn test_lswr_cpp_optimized() {
-    test_lswr(lswr::cpp_optimized::lswr)
-}
-
-#[test]
-fn test_lswr_rust_iter() {
-    test_lswr(lswr::rust_iter::lswr)
-}
-
-#[test]
 fn test_lswr_rust_unsafe() {
     test_lswr(lswr::rust_unsafe::lswr)
 }

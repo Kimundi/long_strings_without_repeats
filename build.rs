@@ -8,6 +8,5 @@ fn main() {
         .cpp(true) // Switch to C++ library compilation.
         .flag("-std=c++11") // Use C++11 features
         .file("src/cpp_naive.cpp")
-        .file("src/cpp_optimized.cpp")
         .compile("libcpp_lswr.a");
 }
