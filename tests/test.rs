@@ -40,3 +40,31 @@ fn test_lswr_cpp_naive() {
 fn test_lswr_rust_unsafe() {
     test_lswr(lswr::rust_unsafe::lswr)
 }
+
+#[test]
+fn test_comparison() {
+    let example = lswr::new_paper_example_string();
+    let repeats = (1024 * 1024) / example.len();
+    let mut big_example = Vec::<u8>::with_capacity(example.len() * repeats);
+
+    for _ in 0..repeats {
+        big_example.extend(example.iter().cloned());
+    }
+
+    let mut string = big_example.clone();
+
+    string.clone_from(&big_example);
+    lswr::rust_naive::lswr(&mut string, 8);
+    let a = string.clone();
+
+    string.clone_from(&big_example);
+    lswr::cpp_naive::lswr(&mut string, 8);
+    let b = string.clone();
+
+    string.clone_from(&big_example);
+    lswr::rust_unsafe::lswr(&mut string, 8);
+    let c = string.clone();
+
+    assert_eq!(a, b);
+    assert_eq!(b, c);
+}
