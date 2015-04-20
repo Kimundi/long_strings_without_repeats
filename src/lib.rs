@@ -1,5 +1,3 @@
-#![feature(libc)]
-
 pub mod rust_naive;
 pub mod cpp_naive;
 pub mod rust_unsafe;
