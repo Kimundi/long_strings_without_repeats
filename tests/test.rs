@@ -42,6 +42,11 @@ fn test_lswr_rust_unsafe() {
 }
 
 #[test]
+fn test_lswr_rust_naive_parallel() {
+    test_lswr(lswr::rust_naive_parallel::lswr)
+}
+
+#[test]
 fn test_comparison() {
     let example = lswr::new_paper_example_string();
     let repeats = (1024 * 1024) / example.len();
@@ -65,6 +70,11 @@ fn test_comparison() {
     lswr::rust_unsafe::lswr(&mut string, 8);
     let c = string.clone();
 
+    string.clone_from(&big_example);
+    lswr::rust_naive_parallel::lswr(&mut string, 8);
+    let d = string.clone();
+
     assert_eq!(a, b);
     assert_eq!(b, c);
+    assert_eq!(c, d);
 }

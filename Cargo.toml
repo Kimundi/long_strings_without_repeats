@@ -9,3 +9,7 @@ gcc = "*"
 
 [dependencies]
 libc = "*"
+
+[dependencies.threadpool]
+version = "*"
+features = ["scoped-pool"]

@@ -2,7 +2,9 @@
 
 pub mod rust_naive;
 pub mod cpp_naive;
+
 pub mod rust_unsafe;
+pub mod rust_naive_parallel;
 
 /// Create example in paper by mapping a = 0, b = 1, c = 2 ...
 pub fn new_paper_example_string() -> Vec<u8> {

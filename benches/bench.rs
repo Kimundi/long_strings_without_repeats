@@ -40,6 +40,11 @@ fn bench_noop_short(bencher: &mut Bencher) {
     bench_lswr_short(bencher, |a, _| a);
 }
 
+#[bench]
+fn bench_rust_naive_parallel_short(bencher: &mut Bencher) {
+    bench_lswr_short(bencher, lswr::rust_naive_parallel::lswr);
+}
+
 // Common generic bencher for a big (1mb) string
 fn bench_lswr_big<F>(bencher: &mut Bencher, lswr: F)
     where F: Fn(&mut [u8], u8) -> &mut [u8]
@@ -80,4 +85,9 @@ fn bench_rust_unsafe_big(bencher: &mut Bencher) {
 fn bench_noop_big(bencher: &mut Bencher) {
     // Test with a no-op implementantion to show memcopy overhead in comparison
     bench_lswr_big(bencher, |a, _| a);
+}
+
+#[bench]
+fn bench_rust_naive_parallel_big(bencher: &mut Bencher) {
+    bench_lswr_big(bencher, lswr::rust_naive_parallel::lswr);
 }
