@@ -3,9 +3,14 @@ use log2_ceil;
 use lsb_differ_index;
 
 /// longest strings without repeats algorithm
-pub fn lswr(a: &mut [u8], alpha_size: u8) -> &mut [u8] {
+pub fn lswr(mut a: &mut [u8], alpha_size: u8) -> &mut [u8] {
     let new_len = phase1(a, alpha_size);
-    let a = &mut a[..new_len];
+    {
+        // This is just a hack to slice the &mut [u8] without bounds checking.
+        // There ought to be a method for it, but it seems to be lost to refactoring currently...
+        let &mut (_, ref mut l): &mut (usize, usize) = unsafe { ::std::mem::transmute(&mut a) };
+        *l = new_len;
+    }
     phase2(a);
     a
 }
@@ -45,11 +50,11 @@ fn phase1(mut a: &mut [u8], mut alpha_size: u8) -> usize {
 }
 
 /// return the least of {0, 1, 2} that is not in {a, b}
-fn neighbor_check(a: Option<u8>, b: Option<u8>) -> u8 {
-    if a != Some(0) && b != Some(0) {
+fn neighbor_check(a: i32, b: i32) -> u8 {
+    if a != 0 && b != 0 {
         // no 0 on left or right
         0
-    } else if a != Some(1) && b != Some(1) {
+    } else if a != 1 && b != 1 {
         // 0, but no 1 on left or right
         1
     } else {
@@ -69,8 +74,8 @@ fn phase2(a: &mut [u8]) {
         for i in 0..a.len() {
             unsafe {
                 if *a.get_unchecked(i) == n {
-                    let left  = if i > 0           { Some(*a.get_unchecked(i-1)) } else { None };
-                    let right = if i < a.len() - 1 { Some(*a.get_unchecked(i+1)) } else { None };
+                    let left  = if i > 0           { *a.get_unchecked(i-1) as i32 } else { -1 };
+                    let right = if i < a.len() - 1 { *a.get_unchecked(i+1) as i32 } else { -1 };
                     *a.get_unchecked_mut(i) = neighbor_check(left, right);
                 }
             }
