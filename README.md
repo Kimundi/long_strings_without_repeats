@@ -1,8 +1,11 @@
 # Long Strings Without Repeats
 
-Implementations in both Rust and C++
+This is an implementation of the Algorithm described in 2.1.1
+in the paper [The String Edit Distance Matching Problem with
+Moves](http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.137.5616&rep=rep1&type=pdf)
+in both Rust and C++.
 
-Assuming both Rust and clang is installed, and the repo cloned locally,
+Assuming both Rust nightly and clang is installed, and the repo cloned locally,
 the testsuite and benchmarks
 can be run like this:
 
